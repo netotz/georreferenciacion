@@ -4,6 +4,7 @@ de estaciones de calidad del aire.
 '''
 
 import pandas as pd
+import plotly
 import plotly.graph_objects as go
 
 from kriging import interpolate
@@ -15,16 +16,18 @@ def plot_heatmap(pollutant: str, day: str) -> None:
     dataframe = pd.read_csv('filled.csv', usecols=['timestamp', 'station', pollutant]).dropna()
     coords = pd.read_csv('coords.csv')
 
-    dates = dataframe.timestamp.unique()
-    # filtrar horas del día elegido
-    hours = (d for d in dates if d.startswith(day))
+    # filtrar registros del día elegido
+    dataset = coords.merge(dataframe.loc[dataframe['timestamp'].str.startswith(day)], on='station')
+    # escala de densidad
+    zmin, zmax = min(dataset.PM10), max(dataset.PM10)
 
     frames, steps = [], []
-    for hour in hours:
+    # filtrar horas del día elegido
+    for hour in dataset.timestamp.unique():
         # coordenadas de las estaciones y el contaminante que leyeron en la hora epecífica
-        dataset = coords.merge(dataframe.loc[dataframe['timestamp'] == hour], on='station')
+        data = dataset.loc[dataset['timestamp'] == hour]
         # método de kringing
-        xcoords, ycoords, zvalues = interpolate(dataset.lon, dataset.lat, dataset[pollutant])
+        xcoords, ycoords, zvalues = interpolate(data.lon, data.lat, data[pollutant])
 
         frames.append({
             'name': f'frame_{hour}',
@@ -33,7 +36,9 @@ def plot_heatmap(pollutant: str, day: str) -> None:
                 'lon': xcoords,
                 'lat': ycoords,
                 'z': zvalues,
-                'opacity': 0.5
+                'opacity': 0.5,
+                'zmin': zmin,
+                'zmax': zmax
             }],
         })
         steps.append({
@@ -90,9 +95,9 @@ def plot_heatmap(pollutant: str, day: str) -> None:
         autosize=True,
         mapbox=dict(
             center=dict(lat=25.67, lon=-100.338),
-            zoom=10.4
+            zoom=9
         )
     )
 
     figure = go.Figure(data=data, layout=layout, frames=frames)
-    figure.show()
+    plotly.offline.plot(figure, filename=f'results/{pollutant}_{day}.html')
