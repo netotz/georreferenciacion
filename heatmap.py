@@ -18,19 +18,26 @@ def plot_heatmap(pollutant: str, day: str) -> None:
 
     # filtrar registros del día elegido
     dataset = coords.merge(dataframe.loc[dataframe['timestamp'].str.startswith(day)], on='station')
+    # convertir strings a objeto datetime
+    strfdt = '%d-%b-%y %H'
+    dataset['timestamp'] = pd.to_datetime(dataset['timestamp'], format=strfdt)
     # escala de densidad
     zmin, zmax = min(dataset.PM10), max(dataset.PM10)
 
     frames, steps = [], []
     # filtrar horas del día elegido
-    for hour in dataset.timestamp.unique():
+    hours = dataset.timestamp.unique()
+    hours.sort()
+    for hour in hours:
         # coordenadas de las estaciones y el contaminante que leyeron en la hora epecífica
         data = dataset.loc[dataset['timestamp'] == hour]
+
         # método de kringing
         xcoords, ycoords, zvalues = interpolate(data.lon, data.lat, data[pollutant])
 
+        strhour = pd.to_datetime(hour).strftime(strfdt)
         frames.append({
-            'name': f'frame_{hour}',
+            'name': f'frame_{strhour}',
             'data': [{
                 'type': 'densitymapbox',
                 'lon': xcoords,
@@ -42,10 +49,10 @@ def plot_heatmap(pollutant: str, day: str) -> None:
             }],
         })
         steps.append({
-            'label': hour,
+            'label': strhour,
             'method': 'animate',
             'args': [
-                [f'frame_{hour}'],
+                [f'frame_{strhour}'],
                 {
                     'mode': 'immediate',
                     'frame': {
