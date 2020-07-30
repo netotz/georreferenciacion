@@ -102,7 +102,7 @@ def plot_heatmap(pollutant: str, day: str) -> None:
         autosize=True,
         mapbox=dict(
             center=dict(lat=25.67, lon=-100.338),
-            zoom=9
+            zoom=10
         )
     )
 
