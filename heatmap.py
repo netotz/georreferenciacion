@@ -22,7 +22,7 @@ def plot_heatmap(pollutant: str, day: str) -> None:
     strfdt = '%d-%b-%y %H'
     dataset['timestamp'] = pd.to_datetime(dataset['timestamp'], format=strfdt)
     # escala de densidad
-    zmin, zmax = min(dataset.PM10), max(dataset.PM10)
+    zmin, zmax = min(dataset[pollutant]), max(dataset[pollutant])
 
     frames, steps = [], []
     # filtrar horas del día elegido
