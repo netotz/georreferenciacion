@@ -1,6 +1,10 @@
 # El archivo pesa 145 MB
 filled.csv
 
+# Token de Mapbox
+# https://docs.mapbox.com/help/tutorials/get-started-tokens-api/
+.token
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
