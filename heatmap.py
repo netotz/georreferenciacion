@@ -26,7 +26,7 @@ def plot_heatmap(pollutant: str, day: str) -> None:
     strfdt = '%d-%b-%y %H'
     dataset['timestamp'] = pd.to_datetime(dataset['timestamp'], format=strfdt)
     # escala de densidad
-    zmin, zmax = min(dataset[pollutant]), max(dataset[pollutant])
+    pollutionmin, pollutionmax = min(dataset[pollutant]), max(dataset[pollutant])
 
     frames, steps = [], []
     # filtrar horas del día elegido
@@ -38,41 +38,61 @@ def plot_heatmap(pollutant: str, day: str) -> None:
 
         ## método de kringing
         # interpolar contaminante
-        xcoords, ycoords, zpollution = interpolate(data.lon, data.lat, data[pollutant])
+        xpollution, ypollution, zpollution = interpolate(data.lon, data.lat, data[pollutant], range(5, 41, 5))
+
+        # rango para interpolación recursiva para valores de viento (20x20 puntos)
+        grid = range(5, 21, 5)
         # interpolar velocidad de viento
-        _, _, zvelocity = interpolate(data.lon, data.lat, data['velocity'])
+        xvelocity, yvelocity, zvelocity = interpolate(data.lon, data.lat, data['velocity'], grid)
         # interpolar dirección de viento
-        _, _, zdirection = interpolate(data.lon, data.lat, data['direction'])
+        xdirection, ydirection, zdirection = interpolate(data.lon, data.lat, data['direction'], grid)
 
         strhour = pd.to_datetime(hour).strftime(strfdt)
-        from random import random
+
         frames.append({
             'name': f'frame_{strhour}',
             'data': [
-                # mapa de vectores de viento
+                # mapa de dirección de viento
                 dict(
                     type='scattermapbox',
-                    lon=xcoords,
-                    lat=ycoords,
+                    lon=xdirection,
+                    lat=ydirection,
                     mode='markers',
                     marker=dict(
-                        opacity=0.7,
-                        # size=zvelocity,
-                        # allowoverlap=True,
                         symbol='marker',
+                        size=6,
+                        allowoverlap=True,
                         angle=[angle + 180 for angle in zdirection]
                     ),
-                    text=coords.station
+                    text=zdirection
+                ),
+                # mapa de velocidad de viento
+                dict(
+                    type='scattermapbox',
+                    lon=xvelocity,
+                    lat=yvelocity,
+                    mode='markers',
+                    marker=dict(
+                        symbol='circle',
+                        size=4,
+                        allowoverlap=True,
+                        color=zvelocity,
+                        cmin=0,
+                        cmax=60,
+                        autocolorscale=True,
+                        coloraxis='coloraxis'
+                    ),
+                    text=zvelocity
                 ),
                 # mapa de calor de densidad de contaminante
                 dict(
                     type='densitymapbox',
-                    lon=xcoords,
-                    lat=ycoords,
+                    lon=xpollution,
+                    lat=ypollution,
                     z=zpollution,
                     opacity=0.5,
-                    zmin=zmin,
-                    zmax=zmax
+                    zmin=pollutionmin,
+                    zmax=pollutionmax
                 )
             ]
         })
