@@ -15,12 +15,12 @@ def get_segments(array: Iterable, n: int) -> np.ndarray:
     amin, amax = min(array), max(array)
     return np.linspace(amin, amax, n)
 
-def interpolate(xcoords: Sequence, ycoords: Sequence, zvalues: Sequence) -> Tuple[List[float], List[float], List[float]]:
+def interpolate(xcoords: Sequence, ycoords: Sequence, zvalues: Sequence, gridrange: range) -> Tuple[List[float], List[float], List[float]]:
     '''
-    Interpola las coordenadas (x, y) con valores en z para estimar puntos usando
-    una malla recursiva desde 5 hasta 40, agregando cada vez.
+    Interpola las coordenadas (`xcoords`, `ycoords`) con valores `zvalues` para estimar puntos
+    usando un rango `gridrange` en forma de malla recursiva.
     '''
-    for k in range(5, 41, 5):
+    for k in gridrange:
         krige = OrdinaryKriging(
             xcoords, ycoords, zvalues,
             variogram_model='spherical'
