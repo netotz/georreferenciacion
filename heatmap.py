@@ -17,7 +17,7 @@ def plot_heatmap(pollutant: str, day: str) -> None:
     # columnas a extraer del CSV
     columns = ['timestamp', 'station', pollutant, 'velocity', 'direction']
     dataframe = pd.read_csv('filled.csv', usecols=columns).dropna()
-    # leer coordenadas de estaciones
+    # leer las coordenadas de las estaciones
     coords = pd.read_csv('coords.csv')
 
     # filtrar registros del día elegido
@@ -33,12 +33,12 @@ def plot_heatmap(pollutant: str, day: str) -> None:
     hours = dataset.timestamp.unique()
     hours.sort()
     for hour in hours:
-        # datos leídos en la hora epecífica
+        # coordenadas de las estaciones y el contaminante que leyeron en la hora epecífica
         data = dataset.loc[dataset['timestamp'] == hour]
 
-        ## método de kringing
+        # método de kringing
         # interpolar contaminante
-        xpollution, ypollution, zpollution = interpolate(data.lon, data.lat, data[pollutant], range(5, 41, 5))
+        xcoords, ycoords, zpollution = interpolate(data.lon, data.lat, data[pollutant], range(5, 41, 5))
 
         # rango para interpolación recursiva para valores de viento (20x20 puntos)
         grid = range(5, 21, 5)
@@ -48,23 +48,23 @@ def plot_heatmap(pollutant: str, day: str) -> None:
         xdirection, ydirection, zdirection = interpolate(data.lon, data.lat, data['direction'], grid)
 
         strhour = pd.to_datetime(hour).strftime(strfdt)
-
+        
         frames.append({
             'name': f'frame_{strhour}',
             'data': [
-                # mapa de dirección de viento
-                dict(
-                    type='scattermapbox',
-                    lon=xdirection,
-                    lat=ydirection,
-                    mode='markers',
-                    marker=dict(
-                        symbol='marker',
-                        size=6,
+                # mapa de vectores de viento
+                dict (
+                    type = 'scattermapbox',
+                    lon = xdirection,
+                    lat = ydirection,
+                    mode = 'markers',
+                    marker = dict(
+                        symbol = 'marker',
+                        size = 10,
                         allowoverlap=True,
-                        angle=[angle + 180 for angle in zdirection]
+                        angle = [angle + 180 for angle in zdirection], 
                     ),
-                    text=zdirection
+                    text = zdirection,
                 ),
                 # mapa de velocidad de viento
                 dict(
@@ -74,9 +74,9 @@ def plot_heatmap(pollutant: str, day: str) -> None:
                     mode='markers',
                     marker=dict(
                         symbol='circle',
-                        size=4,
+                        size=6,
                         allowoverlap=True,
-                        color=zvelocity,
+                        color='rgb(255, 0, 0)',
                         cmin=0,
                         cmax=60,
                         autocolorscale=True,
@@ -85,15 +85,15 @@ def plot_heatmap(pollutant: str, day: str) -> None:
                     text=zvelocity
                 ),
                 # mapa de calor de densidad de contaminante
-                dict(
-                    type='densitymapbox',
-                    lon=xpollution,
-                    lat=ypollution,
-                    z=zpollution,
-                    opacity=0.5,
-                    zmin=pollutionmin,
-                    zmax=pollutionmax
-                )
+                dict (
+                    type = 'densitymapbox',
+                    lon = xcoords,
+                    lat = ycoords,
+                    z = zpollution,
+                    opacity = 0.5,
+                    zmin = pollutionmin,
+                    zmax = pollutionmax                
+                    )
             ]
         })
         steps.append({
@@ -142,7 +142,7 @@ def plot_heatmap(pollutant: str, day: str) -> None:
         }]
     }]
 
-    with open('.token', 'r') as file:
+    with open('mytoken.txt', 'r') as file:
         token = file.read()
 
     layout = go.Layout(
@@ -151,7 +151,7 @@ def plot_heatmap(pollutant: str, day: str) -> None:
         # mapbox_style='stamen-terrain',
         autosize=True,
         mapbox=dict(
-            accesstoken=token,
+            accesstoken = token,
             center=dict(lat=25.67, lon=-100.338),
             zoom=9.3
         )
