@@ -4,6 +4,7 @@ viento y coordenadas de estaciones de calidad del aire.
 '''
 
 import pandas as pd
+import numpy as np
 import plotly
 import plotly.graph_objects as go
 
@@ -25,8 +26,11 @@ def plot_heatmap(pollutant: str, day: str) -> None:
     # convertir strings a objeto datetime
     strfdt = '%d-%b-%y %H'
     dataset['timestamp'] = pd.to_datetime(dataset['timestamp'], format=strfdt)
+    
     # escala de densidad
     pollutionmin, pollutionmax = min(dataset[pollutant]), max(dataset[pollutant])
+
+    velocitymin, velocitymax = min(dataset['velocity']), max(dataset['velocity'])
 
     frames, steps = [], []
     # filtrar horas del día elegido
@@ -60,7 +64,7 @@ def plot_heatmap(pollutant: str, day: str) -> None:
                     mode='markers',
                     marker=dict(
                         symbol='marker',
-                        size=6,
+                        size=12,
                         allowoverlap=True,
                         angle=[angle + 180 for angle in zdirection]
                     ),
@@ -74,13 +78,16 @@ def plot_heatmap(pollutant: str, day: str) -> None:
                     mode='markers',
                     marker=dict(
                         symbol='circle',
-                        size=4,
+                        # size=np.interp(zvelocity, (velocitymin, velocitymax), (1, 12)),
+                        size=12,
                         allowoverlap=True,
-                        color=zvelocity,
-                        cmin=0,
-                        cmax=60,
-                        autocolorscale=True,
-                        coloraxis='coloraxis'
+                        color='white',
+                        opacity=np.interp(zvelocity, (velocitymin, velocitymax), (0, 1)),
+                        # opacity=1,
+                        # cmin=0,
+                        # cmax=60,
+                        # autocolorscale=True,
+                        # coloraxis='coloraxis'
                     ),
                     text=zvelocity
                 ),
@@ -104,16 +111,16 @@ def plot_heatmap(pollutant: str, day: str) -> None:
                 {
                     'mode': 'immediate',
                     'frame': {
-                        'duration': 200,
+                        'duration': 500,
                         'redraw': True
                     },
-                    'transition': {'duration': 100}
+                    'transition': {'duration': 300}
                 }
             ]
         })
 
     sliders = [{
-        'transition': {'duration': 0},
+        'transition': {'duration': 300},
         'x': 0.08,
         'len': 0.88,
         'currentvalue': {'xanchor': 'center'},
@@ -132,10 +139,10 @@ def plot_heatmap(pollutant: str, day: str) -> None:
                 {
                     'mode': 'immediate',
                     'frame': {
-                        'duration': 200,
+                        'duration': 500,
                         'redraw': True
                     },
-                    'transition': {'duration': 100},
+                    'transition': {'duration': 300},
                     'fromcurrent': True
                 }
             ]
