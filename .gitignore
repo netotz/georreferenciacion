@@ -1,6 +1,12 @@
 # El archivo pesa 145 MB
 filled.csv
 
+# GeoJSON municipios de México
+mun2019gw.json
+
+# Egresos
+EGRESO_*.csv
+
 # Token de Mapbox
 # https://docs.mapbox.com/help/tutorials/get-started-tokens-api/
 .token
