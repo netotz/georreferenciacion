@@ -17,9 +17,9 @@ def plot_heatmap(pollutant: str, day: str) -> None:
 
     # columnas a extraer del CSV
     columns = ['timestamp', 'station', pollutant, 'velocity', 'direction']
-    dataframe = pd.read_csv('filled.csv', usecols=columns).dropna()
+    dataframe = pd.read_csv('resources/filled.csv', usecols=columns).dropna()
     # leer coordenadas de estaciones
-    coords = pd.read_csv('coords.csv')
+    coords = pd.read_csv('resources/coords.csv')
 
     # filtrar registros del día elegido
     dataset = coords.merge(dataframe.loc[dataframe['timestamp'].str.startswith(day)], on='station')
@@ -166,5 +166,5 @@ def plot_heatmap(pollutant: str, day: str) -> None:
 
     data = frames[0]['data']
     figure = go.Figure(data=data, layout=layout, frames=frames)
-    plotly.offline.plot(figure, filename=f'results/{pollutant}_{day}.html')
+    plotly.offline.plot(figure, filename=f'results/pollution/{pollutant}_{day}.html')
     # figure.show()
