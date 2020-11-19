@@ -1,5 +1,7 @@
 '''
 Archivo aún no terminado.
+
+AMM = Área Metropolitana de Monterrey
 '''
 
 import json
@@ -10,8 +12,8 @@ import plotly.express as px
 import pandas as pd
 
 # municipios del AMM
-mam_munics = pd.read_csv(
-    'resources/mam_munics.csv',
+amm_munics = pd.read_csv(
+    'resources/AMM_MUNICS.csv',
     dtype={'MUNIC': str},
     encoding='utf-8'
 )
@@ -23,32 +25,24 @@ entries = pd.read_csv(
     dtype={'ENTIDAD': str, 'MUNIC': str}
 ).dropna()
 # filtrar registros del AMM
-entries_mam = entries[
-    (entries.ENTIDAD == '19') & entries.MUNIC.isin(mam_munics.MUNIC)
+entries_amm = entries[
+    (entries.ENTIDAD == '19') & entries.MUNIC.isin(amm_munics.MUNIC)
 ].drop(columns=['ENTIDAD'])
 
-entries_mam.INGRE = pd.to_datetime(entries_mam.INGRE)
+entries_amm.INGRE = pd.to_datetime(entries_amm.INGRE)
 
-
-# avg_ages = entries_mam.groupby(['MUNIC']).mean()
-# avg_ages = mam_munics.merge(avg_ages, on='MUNIC')
-# entries_mam = mam_munics.merge(entries_mam, on='MUNIC')
-
+# avg_ages = entries_amm.groupby(['MUNIC']).mean()
+# avg_ages = amm_munics.merge(avg_ages, on='MUNIC')
+entries_amm = amm_munics.merge(entries_amm, on='MUNIC')
 
 # munics = pd.read_json('resources/mun2019gw.json', encoding='UTF-8')
-# leer GeoJSON de división municipal de México
-with open('resources/mun2019gw.json', 'r', encoding='UTF-8') as jsonfile:
+# leer GeoJSON de municipios del AMM
+with open('resources/amm_mun2019gw.json', 'r', encoding='UTF-8') as jsonfile:
     munics = json.load(jsonfile)
-
-# los municipios del AMM son del 959 al 1002
-munics['features'] = munics['features'][959:1003]
-for feature in munics['features']:
-    # agregar llave 'id' con el valor del ID del municipio
-    feature['id'] = feature['properties']['CVE_MUN']
 
 # crear mapa coroplético
 figure = px.choropleth_mapbox(
-    entries_mam,
+    entries_amm,
     geojson=munics,
     locations='MUNIC',
     color='EDAD',
