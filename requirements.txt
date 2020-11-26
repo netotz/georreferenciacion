@@ -2,3 +2,4 @@ pandas
 numpy
 pykrige
 plotly
+epiweeks
