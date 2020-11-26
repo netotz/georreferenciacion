@@ -121,7 +121,7 @@ def plot_entries_choropleth(year: int) -> None:
     munics_geojson = read_amm_geojson()
 
     # por cada letra inicial de los CIE
-    for cie_letter in entries_amm['LETRA_CIE'].unique()[14:15]:
+    for cie_letter in entries_amm['LETRA_CIE'].unique():
         # filtrar ingresos por la letra CIE
         entries_cie = entries_amm[
             entries_amm['LETRA_CIE'] == cie_letter
@@ -130,7 +130,7 @@ def plot_entries_choropleth(year: int) -> None:
         # listas para animación del mapa
         frames, steps = list(), list()
         # por cada semana en los ingresos del CIE actual
-        for week in entries_cie['INGRE'].unique()[10:41]:
+        for week in entries_cie['INGRE'].unique():
             # filtrar ingresos por la semana
             entries_ingre = entries_cie[
                 entries_cie['INGRE'] == week
