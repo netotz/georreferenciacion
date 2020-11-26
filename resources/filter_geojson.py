@@ -27,5 +27,14 @@ def write_filtered_geojson() -> None:
     with open('amm_mun2019gw.json', 'w', encoding='utf-8') as newfile:
         json.dump(munics, newfile)
 
+def read_amm_geojson() -> dict:
+    '''
+    Lee archivo GeoJSON que contiene la división municipal del AMM.
+
+    :returns: diccionario GeoJSON.
+    '''
+    with open('resources/amm_mun2019gw.json', 'r', encoding='utf-8') as jsonfile:
+        return json.load(jsonfile)
+
 if __name__ == '__main__':
     write_filtered_geojson()
