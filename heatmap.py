@@ -12,7 +12,13 @@ from kriging import interpolate
 
 def plot_heatmap(pollutant: str, day: str) -> None:
     '''
-    Muestra el mapa de calor del contaminante (pollutant) el día (day) en el navegador.
+    Genera un mapa de calor de un contaminante con marcadores
+    de dirección y velocidad del viento del día especificado.
+
+    :pollutant: Nombre del contaminante.
+    
+    :day: Fecha en formato `<día>-<mes corto>-<año corto>` (`'d-b-y'`), ejemplo:
+        '1-Dec-18'
     '''
 
     # columnas a extraer del CSV
@@ -78,16 +84,10 @@ def plot_heatmap(pollutant: str, day: str) -> None:
                     mode='markers',
                     marker=dict(
                         symbol='circle',
-                        # size=np.interp(zvelocity, (velocitymin, velocitymax), (1, 12)),
                         size=12,
                         allowoverlap=True,
                         color='white',
                         opacity=np.interp(zvelocity, (velocitymin, velocitymax), (0, 1)),
-                        # opacity=1,
-                        # cmin=0,
-                        # cmax=60,
-                        # autocolorscale=True,
-                        # coloraxis='coloraxis'
                     ),
                     text=zvelocity
                 ),
@@ -155,7 +155,6 @@ def plot_heatmap(pollutant: str, day: str) -> None:
     layout = go.Layout(
         sliders=sliders,
         updatemenus=playbtn,
-        # mapbox_style='stamen-terrain',
         autosize=True,
         mapbox=dict(
             accesstoken=token,
