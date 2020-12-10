@@ -10,14 +10,14 @@ import plotly.graph_objects as go
 
 from kriging import interpolate
 
-def plot_heatmap(pollutant: str, day: str) -> None:
+def plot_heatmap(pollutant: str, date: str) -> None:
     '''
     Genera un mapa de calor de un contaminante con marcadores
     de dirección y velocidad del viento del día especificado.
 
     :pollutant: Nombre del contaminante.
     
-    :day: Fecha en formato `<día>-<mes corto>-<año corto>` (`'d-b-y'`), ejemplo:
+    :date: Fecha en formato `<día>-<mes corto>-<año corto>` (`'d-b-y'`), ejemplo:
         '1-Dec-18'
     '''
 
@@ -28,7 +28,7 @@ def plot_heatmap(pollutant: str, day: str) -> None:
     coords = pd.read_csv('resources/coords.csv')
 
     # filtrar registros del día elegido
-    dataset = coords.merge(dataframe.loc[dataframe['timestamp'].str.startswith(day)], on='station')
+    dataset = coords.merge(dataframe.loc[dataframe['timestamp'].str.startswith(date)], on='station')
     # convertir strings a objeto datetime
     strfdt = '%d-%b-%y %H'
     dataset['timestamp'] = pd.to_datetime(dataset['timestamp'], format=strfdt)
@@ -165,5 +165,5 @@ def plot_heatmap(pollutant: str, day: str) -> None:
 
     data = frames[0]['data']
     figure = go.Figure(data=data, layout=layout, frames=frames)
-    plotly.offline.plot(figure, filename=f'results/pollution/{pollutant}_{day}.html')
+    plotly.offline.plot(figure, filename=f'results/pollution/{pollutant}_{date}.html')
     # figure.show()
