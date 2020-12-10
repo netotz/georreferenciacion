@@ -7,6 +7,9 @@ mun2019gw.json
 # Egresos
 EGRESO_*.csv
 
+# Carpeta de Visual Studio Code
+.vscode/
+
 # Token de Mapbox
 # https://docs.mapbox.com/help/tutorials/get-started-tokens-api/
 .token
