@@ -11,6 +11,7 @@ def parse_arguments() -> None:
     '''
     Lee argumentos de la consola al usar el comando instalado.
     '''
+    # parser principal
     parser = ArgumentParser(
         description='''
             Genera un archivo HTML de un tipo de mapa especificado por
@@ -18,15 +19,18 @@ def parse_arguments() -> None:
             Todos los mapas se grafican sobre el Área Metropolitana de Monterrey (AMM).
             '''
     )
-    subparsers = parser.add_subparsers(
+    # subcomandos para definir el tipo de mapa (coroplético o de calor)
+    maptypes = parser.add_subparsers(
         title='tipo de mapa',
         description='''
             Define el tipo de mapa a generar.
             Cada tipo tiene argumentos específicos:''',
+        dest='maptype',
         required=True
     )
 
-    choropleth_parser = subparsers.add_parser(
+    # subparser de argumentos para mapa coroplético
+    choropleth_parser = maptypes.add_parser(
         'choroplethmap',
         aliases=['cm'],
         help='''
@@ -40,7 +44,8 @@ def parse_arguments() -> None:
         help='Año del archivo de egresos a leer: EGRESOS_{year}.csv'
     )
 
-    heat_parser = subparsers.add_parser(
+    # subparser de argumentos para mapa de calor
+    heat_parser = maptypes.add_parser(
         'heatmap',
         aliases=['hm'],
         help='''
@@ -62,8 +67,10 @@ def parse_arguments() -> None:
             '''
     )
 
+    # si el comando no recibe argumentos
     if len(sys.argv) == 1:
         parser.print_help()
-        sys.exit(1)
+        return
 
+    # leer argumentos de consola
     arguments = parser.parse_args()
