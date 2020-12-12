@@ -1,6 +1,5 @@
 '''
-Archivo para ya sea generar mapas de calor de contaminantes
-o mapas coropléticos de ingresos por CIE.
+Funciones para la consola de comandos (CLI).
 
 #! No terminado aún.
 '''
