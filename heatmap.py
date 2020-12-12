@@ -16,11 +16,10 @@ def plot_heatmap(pollutant: str, date: str) -> None:
     de dirección y velocidad del viento del día especificado.
 
     :pollutant: Nombre del contaminante.
-    
+
     :date: Fecha en formato `<día>-<mes corto>-<año corto>` (`'d-b-y'`), ejemplo:
         '1-Dec-18'
     '''
-
     # columnas a extraer del CSV
     columns = ['timestamp', 'station', pollutant, 'velocity', 'direction']
     dataframe = pd.read_csv('resources/filled.csv', usecols=columns).dropna()
@@ -32,7 +31,7 @@ def plot_heatmap(pollutant: str, date: str) -> None:
     # convertir strings a objeto datetime
     strfdt = '%d-%b-%y %H'
     dataset['timestamp'] = pd.to_datetime(dataset['timestamp'], format=strfdt)
-    
+
     # escala de densidad
     pollutionmin, pollutionmax = min(dataset[pollutant]), max(dataset[pollutant])
 
@@ -165,5 +164,10 @@ def plot_heatmap(pollutant: str, date: str) -> None:
 
     data = frames[0]['data']
     figure = go.Figure(data=data, layout=layout, frames=frames)
-    plotly.offline.plot(figure, filename=f'results/pollution/{pollutant}_{date}.html')
+
+    # plotly.offline.plot(figure, filename=f'results/pollution/{pollutant}_{date}.html')
+    # obtener mapa en HTML como string
+    graph = plotly.offline.plot(figure, output_type='div')
+    # guardar string en archivo
+    print(graph)
     # figure.show()

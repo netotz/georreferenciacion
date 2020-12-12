@@ -215,6 +215,9 @@ def plot_entries_choropleth(year: int) -> None:
 
         data = frames[0]['data']
         figure = go.Figure(data=data, layout=layout, frames=frames)
-        # guardar mapa interactivo en formato HTML
-        plotly.offline.plot(figure, filename=f'results/entries/choropleth{year}{cie_letter}.html')
+        # obtener mapa en HTML como string
+        graph = plotly.offline.plot(figure, output_type='div')
+        # guardar string en archivo
+        print(graph)
+        # plotly.offline.plot(figure, filename=f'results/entries/choropleth{year}{cie_letter}.html')
         # figure.show()
