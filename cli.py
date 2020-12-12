@@ -6,10 +6,14 @@ Funciones para la consola de comandos (CLI).
 
 import sys
 from argparse import ArgumentParser
+from typing import Optional, List
 
-def parse_arguments() -> None:
+def parse_arguments(optional_args: Optional[List[str]] = None) -> None:
     '''
     Lee argumentos de la consola al usar el comando instalado.
+
+    :param optional_args: Lista de argumentos opcionales, por defecto `None`.
+    Si se especifica, no se leerán los recibidos por consola.
     '''
     # parser principal
     parser = ArgumentParser(
@@ -73,4 +77,4 @@ def parse_arguments() -> None:
         return
 
     # leer argumentos de consola
-    arguments = parser.parse_args()
+    arguments = parser.parse_args(optional_args)
