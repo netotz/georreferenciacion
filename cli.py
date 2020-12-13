@@ -43,13 +43,14 @@ def parse_arguments(optional_args: Optional[List[str]] = None) -> None:
     common_args_parser = ArgumentParser(add_help=False)
     common_args_parser.add_argument(
         '-o', '--output',
-        metavar='PATH/TO/FILE.html',
+        metavar='FILEPATH',
         type=Path,
-        help='''Ruta relativa del archivo destino para guardar el mapa.
+        help='''Ruta relativa del archivo destino HTML para guardar el mapa.
             Si no se especifica, se genera un nombre de archivo basado en
             los argumentos posicionales y lo crea en el directorio actual.
             Si el archivo ya existe lo sobrescribe.
-            La ruta debe contener carpetas existentes.'''
+            La ruta debe contener carpetas existentes.
+            Ejemplos: diractual.html , carpetas/existentes/mapa.html'''
     )
 
     cm_help = '''Mapa coroplético que muestra el conteo de casos de ingresos
