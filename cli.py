@@ -8,6 +8,7 @@ import sys
 from argparse import ArgumentParser
 from typing import Optional, List
 from pathlib import Path
+import string
 
 from heatmap import plot_heatmap
 from choropleth import plot_entries_choropleth
@@ -57,7 +58,7 @@ def parse_arguments(optional_args: Optional[List[str]] = None) -> None:
         agrupados por municipio, CIE y semana epidemiológica
         de un año específico.'''
     cm_description = f'''Genera un {cm_help[0].lower()}{cm_help[1:]}
-        Ejemplo: georef cm 2018'''
+        Ejemplo: georef cm 2018 O'''
     # subparser de argumentos para mapa coroplético
     choropleth_parser = maptypes.add_parser(
         'choroplethmap',
@@ -70,6 +71,11 @@ def parse_arguments(optional_args: Optional[List[str]] = None) -> None:
         'year',
         type=int,
         help='Año del archivo de egresos a leer: EGRESOS_{year}.csv'
+    )
+    choropleth_parser.add_argument(
+        'cie',
+        choices=string.ascii_uppercase,
+        help='Primera letra del diagnóstico CIE'
     )
 
     hm_help = '''Mapa de calor que muestra la densidad de un contaminante
@@ -111,7 +117,8 @@ def parse_arguments(optional_args: Optional[List[str]] = None) -> None:
     # no es necesario checar si el subcomando 'maptype' existe porque es obligatorio
     if arguments.maptype in ('cm', 'choroplethmap'):
         year = arguments.year
-        plot_entries_choropleth(year, filepath)
+        cie = arguments.cie
+        plot_entries_choropleth(year, cie, filepath)
     elif arguments.maptype in ('hm', 'heatmap'):
         pollutant = arguments.pollutant
         date = arguments.date
