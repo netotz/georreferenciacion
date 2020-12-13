@@ -92,7 +92,8 @@ def parse_arguments(optional_args: Optional[List[str]] = None) -> None:
     heat_parser.add_argument(
         'date',
         type=str,
-        help='''Fecha en formato '<día>-<mes corto>-<año corto>', ejemplo: \'1-Dec-18\''''
+        help='''Fecha en inglés con formato '<día>-<mes corto>-<año corto>',
+            ejemplo: \'1-Dec-18\''''
     )
 
     # si el comando no recibe argumentos
