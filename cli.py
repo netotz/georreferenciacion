@@ -31,8 +31,6 @@ def parse_arguments(optional_args: Optional[List[str]] = None) -> None:
     maptypes = parser.add_subparsers(
         title='tipo de mapa',
         description='''Define el tipo de mapa a generar.
-            Para guardar el mapa en un archivo HTML, usar el operador '>'
-            y el nombre del archivo al final del comando.
             Agrega el argumento '-h' o '--help' después del subcomando
             para ver los argumentos de cada uno:''',
         dest='maptype',
