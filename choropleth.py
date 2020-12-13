@@ -107,12 +107,14 @@ def get_amm_entries(year: int) -> pd.DataFrame:
 
     return entries_amm
 
-def plot_entries_choropleth(year: int) -> None:
+def plot_entries_choropleth(year: int, output: str = '') -> None:
     '''
     Genera un mapa coroplético animado sobre el conteo de
     ingresos por municipio, CIE y semana epidemiológica.
 
     :param year: año del archivo a leer (EGRESO_`year`.csv).
+
+    :param output: Ruta relativa del archivo HTML para guardar el mapa coroplético.
     '''
     entries_amm = get_amm_entries(year)
     # límites de casos por archivo (año)
@@ -215,9 +217,8 @@ def plot_entries_choropleth(year: int) -> None:
 
         data = frames[0]['data']
         figure = go.Figure(data=data, layout=layout, frames=frames)
-        # obtener mapa en HTML como string
-        graph = plotly.offline.plot(figure, output_type='div')
-        # guardar string en archivo
-        print(graph)
-        # plotly.offline.plot(figure, filename=f'results/entries/choropleth{year}{cie_letter}.html')
-        # figure.show()
+
+        # si no se especificó nombre de archivo, generar uno
+        filepath = output if output else f'ingresos_{year}.html'
+        # guardar mapa en archivo
+        plotly.offline.plot(figure, filename=filepath)

@@ -10,15 +10,17 @@ import plotly.graph_objects as go
 
 from kriging import interpolate
 
-def plot_heatmap(pollutant: str, date: str) -> None:
+def plot_heatmap(pollutant: str, date: str, output: str = '') -> None:
     '''
     Genera un mapa de calor de un contaminante con marcadores
     de dirección y velocidad del viento del día especificado.
 
-    :pollutant: Nombre del contaminante.
+    :param pollutant: Nombre del contaminante.
 
-    :date: Fecha en formato `<día>-<mes corto>-<año corto>` (`'d-b-y'`), ejemplo:
+    :param date: Fecha en formato `<día>-<mes corto>-<año corto>` (`'d-b-y'`), ejemplo:
         '1-Dec-18'
+
+    :param output: Ruta relativa del archivo HTML para guardar el mapa de calor.
     '''
     # columnas a extraer del CSV
     columns = ['timestamp', 'station', pollutant, 'velocity', 'direction']
@@ -165,9 +167,7 @@ def plot_heatmap(pollutant: str, date: str) -> None:
     data = frames[0]['data']
     figure = go.Figure(data=data, layout=layout, frames=frames)
 
-    # plotly.offline.plot(figure, filename=f'results/pollution/{pollutant}_{date}.html')
-    # obtener mapa en HTML como string
-    graph = plotly.offline.plot(figure, output_type='div')
-    # guardar string en archivo
-    print(graph)
-    # figure.show()
+    # si no se especificó nombre de archivo, generar uno
+    filepath = output if output else f'{pollutant}_{date}.html'
+    # guardar mapa en archivo
+    plotly.offline.plot(figure, filename=filepath)
