@@ -22,6 +22,10 @@ def plot_heatmap(pollutant: str, date: str, output: str = '') -> None:
 
     :param output: Ruta relativa del archivo HTML para guardar el mapa de calor.
     '''
+    # si no se especificó nombre de archivo, generar uno
+    filepath = output if output else f'{pollutant}_{date}.html'
+    print(f'{filepath}: Preparando datos...', flush=True)
+
     # columnas a extraer del CSV
     columns = ['timestamp', 'station', pollutant, 'velocity', 'direction']
     dataframe = pd.read_csv('resources/filled.csv', usecols=columns).dropna()
@@ -43,6 +47,7 @@ def plot_heatmap(pollutant: str, date: str, output: str = '') -> None:
     # filtrar horas del día elegido
     hours = dataset.timestamp.unique()
     hours.sort()
+    print(f'{filepath}: Generando mapa de calor...', flush=True)
     for hour in hours:
         # datos leídos en la hora epecífica
         data = dataset.loc[dataset['timestamp'] == hour]
@@ -167,7 +172,6 @@ def plot_heatmap(pollutant: str, date: str, output: str = '') -> None:
     data = frames[0]['data']
     figure = go.Figure(data=data, layout=layout, frames=frames)
 
-    # si no se especificó nombre de archivo, generar uno
-    filepath = output if output else f'{pollutant}_{date}.html'
+    print(f'{filepath}: Guardando mapa en archivo...', flush=True)
     # guardar mapa en archivo
     plotly.offline.plot(figure, filename=filepath)
