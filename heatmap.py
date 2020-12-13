@@ -10,7 +10,7 @@ import plotly.graph_objects as go
 
 from kriging import interpolate
 
-def plot_heatmap(pollutant: str, date: str, output: str = '') -> None:
+def plot_heatmap(pollutant: str, date: str, tokenfile: str, output: str = '') -> None:
     '''
     Genera un mapa de calor de un contaminante con marcadores
     de dirección y velocidad del viento del día especificado.
@@ -155,7 +155,7 @@ def plot_heatmap(pollutant: str, date: str, output: str = '') -> None:
         }]
     }]
 
-    with open('.token', 'r') as file:
+    with open(tokenfile, 'r') as file:
         token = file.read()
 
     layout = go.Layout(

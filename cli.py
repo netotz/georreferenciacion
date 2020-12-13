@@ -78,7 +78,8 @@ def parse_arguments(optional_args: Optional[List[str]] = None) -> None:
 
     hm_help = '''Mapa de calor que muestra la densidad de un contaminante
         junto con marcadores que representan la velocidad y dirección
-        del viento de una fecha específica.'''
+        del viento de una fecha específica.
+        Requiere tener un token de Mapbox.'''
     hm_description = f'''Genera un {hm_help[0].lower()}{hm_help[1:]}
         Ejemplo: georef hm PM10 25-Dec-18'''
     # subparser de argumentos para mapa de calor
@@ -100,6 +101,14 @@ def parse_arguments(optional_args: Optional[List[str]] = None) -> None:
         help='''Fecha en inglés con formato '<día>-<mes corto>-<año corto>',
             ejemplo: \'1-Dec-18\''''
     )
+    heat_parser.add_argument(
+        '-t', '--token',
+        metavar='FILEPATH',
+        type=Path,
+        required=True,
+        help='''Ruta relativa del archivo que contiene el token de Mapbox.
+            Más información: https://docs.mapbox.com/help/tutorials/get-started-tokens-api/'''
+    )
 
     # si el comando no recibe argumentos
     if len(sys.argv) == 1:
@@ -120,4 +129,5 @@ def parse_arguments(optional_args: Optional[List[str]] = None) -> None:
     elif arguments.maptype in ('hm', 'heatmap'):
         pollutant = arguments.pollutant
         date = arguments.date
-        plot_heatmap(pollutant, date, filepath)
+        token = str(arguments.token)
+        plot_heatmap(pollutant, date, token, filepath)
