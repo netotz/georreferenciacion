@@ -1,5 +1,8 @@
 '''
-Módulo para instalar el programa como paquete y poder usar los comandos en consola.
+Módulo para poder generar los mapas usando un comando de consola.
+
+Para instalarlo como parquete, usar `python setup.py install`,
+luego ejecutarlo con el comando `georef`.
 '''
 
 from setuptools import setup
