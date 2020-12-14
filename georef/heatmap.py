@@ -20,6 +20,8 @@ def plot_heatmap(pollutant: str, date: str, tokenfile: str, output: str = '') ->
     :param date: Fecha en formato `<día>-<mes corto>-<año corto>` (`'d-b-y'`), ejemplo:
         '1-Dec-18'
 
+    :param tokenfile: Archivo con token de Mapbox.
+
     :param output: Ruta relativa del archivo HTML para guardar el mapa de calor.
     '''
     # si no se especificó nombre de archivo, generar uno

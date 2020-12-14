@@ -1,7 +1,5 @@
 '''
 Funciones para la consola de comandos (CLI).
-
-#! No terminado aún.
 '''
 
 import sys
@@ -24,7 +22,8 @@ def parse_arguments(optional_args: Optional[List[str]] = None) -> None:
     parser = ArgumentParser(
         description='''Genera el HTML de un tipo de mapa especificado por
             los siguientes comandos y sus argumentos.
-            Todos los mapas se grafican sobre el Área Metropolitana de Monterrey (AMM).'''
+            Todos los mapas se grafican sobre el Área Metropolitana de Monterrey (AMM).
+            En el directorio actual debe '''
     )
 
     # subcomandos para definir el tipo de mapa (coroplético o de calor)
@@ -131,3 +130,7 @@ def parse_arguments(optional_args: Optional[List[str]] = None) -> None:
         date = arguments.date
         token = str(arguments.token)
         plot_heatmap(pollutant, date, token, filepath)
+
+# ejecutar la aplicación de consola al correr este archivo
+if __name__ == '__main__':
+    parse_arguments()

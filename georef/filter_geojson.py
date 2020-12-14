@@ -14,7 +14,7 @@ def write_filtered_geojson() -> None:
     Crea un nuevo archivo GeoJSON con solo los municipios del AMM.
     '''
     # leer GeoJSON de división municipal de México
-    with open('mun2019gw.json', 'r', encoding='utf-8') as jsonfile:
+    with open('resources/mun2019gw.json', 'r', encoding='utf-8') as jsonfile:
         munics = json.load(jsonfile)
 
     # los municipios del AMM son del 959 al 1002
@@ -24,7 +24,7 @@ def write_filtered_geojson() -> None:
         feature['id'] = feature['properties']['CVE_MUN']
 
     # guardar datos GeoJSON filtrados por AMM
-    with open('amm_mun2019gw.json', 'w', encoding='utf-8') as newfile:
+    with open('resources/amm_mun2019gw.json', 'w', encoding='utf-8') as newfile:
         json.dump(munics, newfile)
 
 def read_amm_geojson() -> dict:

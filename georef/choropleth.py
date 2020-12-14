@@ -13,8 +13,8 @@ import plotly.graph_objects as go
 import pandas as pd
 import epiweeks
 
-from resources.filter_geojson import read_amm_geojson
-from resources.readers import read_entries, read_amm_municipalities
+from filter_geojson import read_amm_geojson
+from readers import read_entries, read_amm_municipalities
 
 def group_dates_by_epiweeks(entries_dates: pd.Series) -> pd.Series:
     '''
