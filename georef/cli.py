@@ -23,7 +23,10 @@ def parse_arguments(optional_args: Optional[List[str]] = None) -> None:
         description='''Genera el HTML de un tipo de mapa especificado por
             los siguientes comandos y sus argumentos.
             Todos los mapas se grafican sobre el Área Metropolitana de Monterrey (AMM).
-            En el directorio actual debe '''
+            En el directorio actual debe existir un carpeta de nombre 'resources'
+            que contenga los archivos necesarios para generar los mapas.
+            Más información: https://github.com/netotz/georreferenciacion/blob/master/README.md#georreferenciaci%C3%B3n
+            '''
     )
 
     # subcomandos para definir el tipo de mapa (coroplético o de calor)
