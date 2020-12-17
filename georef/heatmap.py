@@ -3,6 +3,8 @@ Genera un mapa de calor basado en datos de contaminantes,
 viento y coordenadas de estaciones de calidad del aire.
 '''
 
+from math import copysign
+
 import pandas as pd
 import numpy as np
 import plotly
@@ -31,11 +33,29 @@ def plot_heatmap(pollutant: str, date: str, tokenfile: str, output: str = '') ->
     # columnas a extraer del CSV
     columns = ['timestamp', 'station', pollutant, 'velocity', 'direction']
     dataframe = pd.read_csv('resources/filled.csv', usecols=columns).dropna()
-    # leer coordenadas de estaciones
-    coords = pd.read_csv('resources/coords.csv')
 
-    # filtrar registros del día elegido
-    dataset = coords.merge(dataframe.loc[dataframe['timestamp'].str.startswith(date)], on='station')
+    # leer coordenadas de estaciones
+    coords = pd.read_csv('resources/estaciones.dat')
+    # iterar sobre índice y datos de cada fila
+    for i, r in coords.iterrows():
+        # signo de latitud: + Norte, - Sur
+        sign = copysign(1, r[0])
+        # calcular coordenadas decimales a partir de GMS
+        coords.loc[i, 'lat'] = sign * (abs(r[0]) + r[1] / 60 + r[2] / 3600)
+
+        # signo de longitud: + Este, - Oeste
+        sign = copysign(1, r[3])
+        # calcular coordenadas decimales a partir de GMS
+        coords.loc[i, 'lon'] = sign * (abs(r[3]) + r[4] / 60 + r[5] / 3600)
+
+    dataset = coords.merge(
+        # filtrar registros del día elegido
+        dataframe.loc[dataframe['timestamp'].str.startswith(date)],
+        # unir DataFrames de datos con coordenadas
+        on='station'
+    # eliminar columnas GMS
+    ).drop(coords.columns[range(6)], axis=1)
+
     # convertir strings a objeto datetime
     strfdt = '%d-%b-%y %H'
     dataset['timestamp'] = pd.to_datetime(dataset['timestamp'], format=strfdt)
@@ -177,3 +197,5 @@ def plot_heatmap(pollutant: str, date: str, tokenfile: str, output: str = '') ->
     print(f'{filepath}: Guardando mapa en archivo...', flush=True)
     # guardar mapa en archivo
     plotly.offline.plot(figure, filename=filepath)
+
+plot_heatmap('PM10', '31-Dec-18', '')
