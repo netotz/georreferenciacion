@@ -12,7 +12,7 @@ with open('requirements.txt', 'r') as file:
 
 setup(
     name='georef',
-    version='1.0.0',
+    version='2.0.0',
     packages=['georef'],
     python_requires='>=3.7.0',
     install_requires=requirements,
