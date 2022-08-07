@@ -1,7 +1,16 @@
 # Georreferenciación
 
-Proyecto de investigación de PROVERICYT 2020:
+Verano Científico de la UANL 2020:
 Georreferenciación con datos de contaminantes en el Área Metropolitana de Monterrey (AMM).
+
+Ver póster en español [aquí](https://uanledu-my.sharepoint.com/:b:/g/personal/andres_ortizlpz_uanl_edu_mx/EWu9182vF_BGgz2Ai2FZDVQBURQJADUHYJ_OZv_6INo-TA?e=Vfn6gq).
+
+---
+
+2020 University Scientific Summer:
+Geostatistical analysis of pollution in the city of Monterrey, México.
+
+See Spanish poster [here](https://uanledu-my.sharepoint.com/:b:/g/personal/andres_ortizlpz_uanl_edu_mx/EWu9182vF_BGgz2Ai2FZDVQBURQJADUHYJ_OZv_6INo-TA?e=Vfn6gq).
 
 ## CLI
 
@@ -20,7 +29,15 @@ Luego de instalarlo, el programa estará disponible con el comando `georef`, sin
 
 `georef --help`
 
-## Mapas de calor
+## Mapas de calor / Heat maps
+
+Translated from publication (not revised):
+
+> Meteorological stations monitor air quality only in the microenvironment around them, so spatial interpolation methods are used, which are used to estimate or predict new levels of pollutants at points without information, based on the locations of the stations. stations and their known values.
+> 
+> Kriging is a spatial interpolation method that provides the best unbiased linear estimator of a point and minimizes the variance of the estimate. In the present work, the ordinary kriging method is used.
+> 
+> Starting from the known locations, that is, the thirteen monitoring stations, the points with calculated values ​​of the pollutant are predicted using a recursive calculation method by grids: it begins by executing the kriging method with a 5 × 5 grid, which is used to calculate another by adding five rows and five columns, 10 × 10. The procedure ends when there is a 40 × 40 coordinate grid, within which each cell has an estimated value on the pollutant, which results in a total of 1600 estimated points. These new points are used to plot a heat map for a pollutant on the MMA.
 
 Se requiere una base de datos CSV con la siguiente cabecera:
 
@@ -42,7 +59,7 @@ y enlaces para visualizarlos.
 - La dirección de los marcadores indica la dirección del viento.
 - La opacidad de los círculos sobre los marcadores representa la velocidad del viento.
 
-## Mapas coropléticos
+## Mapas coropléticos / Choropleth maps
 
 Se requiere uno de los archivos `EGRESO_{año}.csv` disponibles en el
 [sitio web de la Secretaría de Salud](http://www.dgis.salud.gob.mx/contenidos/basesdedatos/da_egresoshosp_gobmx.html).
